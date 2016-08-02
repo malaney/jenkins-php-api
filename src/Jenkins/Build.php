@@ -249,4 +249,9 @@ class Build
     {
         return $this->build->builtOn;
     }
+
+    public function getChangeSet()
+    {
+        return $this->build->changeSet;
+    }
 }
