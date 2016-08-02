@@ -415,12 +415,15 @@ class Jenkins
      * @return Jenkins\Build
      * @throws \RuntimeException
      */
-    public function getBuild($job, $buildId, $tree = 'actions[parameters,parameters[name,value]],result,duration,timestamp,number,url,estimatedDuration,builtOn')
+    public function getBuild($job, $buildId, $tree=null)
     {
-        if ($tree !== null) {
-            $tree = sprintf('?tree=%s', $tree);
+        $defaultTreeParams = 'actions[parameters,parameters[name,value]],result,duration,timestamp,number,url,estimatedDuration,builtOn';
+        if (is_null($tree)) {
+            $tree = $defaultTreeParams;
         }
-        $url  = sprintf('%s/job/%s/%d/api/json%s', $this->baseUrl, $job, $buildId, $tree);
+        $tree = sprintf('?tree=%s', $tree);
+
+        $url  = sprintf('%s/job/%s/%d/api/json%s', $this->baseUrl, rawurlencode($job), $buildId, $tree);
         $curl = curl_init($url);
 
         curl_setopt($curl, \CURLOPT_RETURNTRANSFER, 1);

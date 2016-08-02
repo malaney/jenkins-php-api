@@ -31,11 +31,11 @@ class Job
     /**
      * @return Build[]
      */
-    public function getBuilds()
+    public function getBuilds($tree=null)
     {
         $builds = array();
         foreach ($this->job->builds as $build) {
-            $builds[] = $this->getJenkinsBuild($build->number);
+            $builds[] = $this->getJenkinsBuild($build->number, $tree);
         }
 
         return $builds;
@@ -48,9 +48,9 @@ class Job
      * @return Build
      * @throws \RuntimeException
      */
-    public function getJenkinsBuild($buildId)
+    public function getJenkinsBuild($buildId, $tree=null)
     {
-        return $this->getJenkins()->getBuild($this->getName(), $buildId);
+        return $this->getJenkins()->getBuild($this->getName(), $buildId, $tree);
     }
 
     /**
@@ -147,24 +147,24 @@ class Job
     /**
      * @return Build|null
      */
-    public function getLastSuccessfulBuild()
+    public function getLastSuccessfulBuild($tree=null)
     {
         if (null === $this->job->lastSuccessfulBuild) {
             return null;
         }
 
-        return $this->getJenkins()->getBuild($this->getName(), $this->job->lastSuccessfulBuild->number);
+        return $this->getJenkins()->getBuild($this->getName(), $this->job->lastSuccessfulBuild->number, $tree);
     }
 
     /**
      * @return Build|null
      */
-    public function getLastBuild()
+    public function getLastBuild($tree=null)
     {
         if (null === $this->job->lastBuild) {
             return null;
         }
 
-        return $this->getJenkins()->getBuild($this->getName(), $this->job->lastBuild->number);
+        return $this->getJenkins()->getBuild($this->getName(), $this->job->lastBuild->number, $tree);
     }
 }
